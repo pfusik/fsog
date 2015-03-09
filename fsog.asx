@@ -63,11 +63,15 @@ gfx_all
 	cpx	#FIRST_SHADE+50
 	bcc	gfx_all
 
-	sei:inc	^4e
 	lda:rne	^4b
+	sta	^1a
+	mva	#$0c	^16
 	mva	#$21	^40
 	mwa	#dl1	^42
-	mva	#$41	^1b
+;	mva	#$41	^1b
+	mwa	#dli	$200
+	mwa	#vbi	$222
+	mva	#$c0	^4e
 
 	jmp	*
 
@@ -79,6 +83,16 @@ dl_second
 	seq:dec	ptr+1
 	dec	ptr+1
 	rts
+
+vbi
+	mva	#0	^1b
+	jmp	($224)
+
+dli
+	pha
+	mva	#$40	^1b
+	pla
+	rti
 
 gfx_plot
 	lda	color
