@@ -1,0 +1,150 @@
+FIRST_SHADE	equ	6
+
+gfx1a	equ	$3000
+gfx1b	equ	$3100
+gfx2a	equ	$3200
+gfx2b	equ	$3300
+
+ptr	equ	$80
+color	equ	$82
+
+	org	$3800
+main
+	mva	#0	ptr
+	tay
+	ldx	>gfx1a
+screen_clear
+	stx	ptr+1
+	sta:rne	(ptr),y+
+	inx:cpx	>dl1
+	bcc	screen_clear
+
+	ldy	#dl1_gfx-dl1
+	stx	ptr+1
+	tax	; #0
+
+dl_line
+	txa
+	and	#$0f
+	bne	dl_no_blank
+	lda	#$70
+	jsr	dl_both
+dl_no_blank
+	lda	#$4f
+	jsr	dl_both
+	txa
+	and	#$f0
+	asl	@
+	jsr	dl_both
+	txa
+	and	#1
+	eor	>gfx1a
+	sta	(ptr),y
+	eor	>gfx2a^gfx1a
+	jsr	dl_second
+	inx
+	cpx	#$70
+	bcc	dl_line
+
+	lda	#$41
+	jsr	dl_both
+	lda	<dl1
+	jsr	dl_both
+	mva	>dl2	(ptr),y
+	lda	>dl1
+	jsr	dl_second
+
+	ldx	#FIRST_SHADE
+gfx_all
+	stx	color
+	jsr	gfx_plot
+	ldx	color
+	inx
+	cpx	#FIRST_SHADE+50
+	bcc	gfx_all
+
+	sei:inc	^4e
+	lda:rne	^4b
+	mva	#$21	^40
+	mwa	#dl1	^42
+	mva	#$41	^1b
+
+	jmp	*
+
+dl_both
+	sta	(ptr),y
+dl_second
+	inc:inc	ptr+1
+	sta	(ptr),y+
+	seq:dec	ptr+1
+	dec	ptr+1
+	rts
+
+gfx_plot
+	lda	color
+	cmp	#FIRST_SHADE+49
+	bcc	gfx_plot_normal
+	mva	#71	ptr
+	bcs	gfx_plot_last
+gfx_plot_normal
+	ldx	#-1
+	sub	#FIRST_SHADE
+gfx_div7
+	inx
+	sbc	#7
+	bcs	gfx_div7
+	adc	#7
+	sta	ptr
+	txa
+:4	asl	@
+	adc	ptr
+gfx_plot_last
+	asl	@
+	adc	#6
+	tay
+	
+	mva	>gfx1a	ptr+1
+	ldx	#0
+gfx_plot_1
+	lda	color
+	and	#3
+	cmp	gfx_shading,x
+	lda	color
+	ror	@
+	lsr	@
+	cmp	#$40
+	scc:adc	#-$40
+	tax
+	lda	mul17,x
+	sta	(ptr),y+
+	sta	(ptr),y-
+	inc	ptr+1
+	lda	ptr+1
+	and	#3
+	tax
+	bne	gfx_plot_1
+	rts
+
+gfx_shading
+	dta	4,3,2,1
+mul17
+:16	dta	$11*#
+
+text
+	dta	d'       '
+text_cnt
+	dta	d' 1       '
+	dta	d' SHADE'
+text_s
+	dta	d'  OF GREY '
+
+	org	$3400
+dl1
+	dta	$70,$70,$47,a(text),$70,$86
+dl1_gfx
+
+	org	$3600
+dl2
+	dta	$70,$70,$47,a(text),$70,$86
+
+	run	main
