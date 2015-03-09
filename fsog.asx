@@ -7,6 +7,7 @@ gfx2b	equ	$3300
 
 ptr	equ	$80
 color	equ	$82
+mask	equ	$83
 
 	org	$3800
 main
@@ -54,15 +55,6 @@ dl_no_blank
 	lda	>dl1
 	jsr	dl_second
 
-	ldx	#FIRST_SHADE
-gfx_all
-	stx	color
-	jsr	gfx_plot
-	ldx	color
-	inx
-	cpx	#FIRST_SHADE+50
-	bcc	gfx_all
-
 	lda:rne	^4b
 	sta	^1a
 	mva	#$0c	^16
@@ -73,7 +65,54 @@ gfx_all
 	mwa	#vbi	$222
 	mva	#$c0	^4e
 
+	mva	#32	color
+	jsr	gfx_plot
+	ldx	#200
+	jsr	delay
+
+loop
+	ldx	#40
+	jsr	delay
+
+color_inc
+	mva	#32	mask
+	lda	color
+color_inc_next_bit
+	eor:bit	mask
+	bne	color_inced
+	lsr	mask
+	bne	color_inc_next_bit
+color_inced
+	sta	color
+	cmp	#FIRST_SHADE
+	bcc	color_inc
+	cmp	#FIRST_SHADE+50
+	bcs	color_inc
+	jsr	gfx_plot
+
+	mva	#'S'-$20	text_s
+	lda	text_cnt
+	ldx	text_cnt+1
+	inx
+	cpx	#$1a
+	bcc	text_cnt_inc
+	adc	#0
+	ora	#$10
+	sta	text_cnt
+	ldx	#$10
+text_cnt_inc
+	stx	text_cnt+1
+	cmp	#$15
+	bcc	loop
+
 	jmp	*
+
+delay
+	lda:rne	^4b
+	lda:req	^4b
+	dex
+	bne	delay
+	rts
 
 dl_both
 	sta	(ptr),y
@@ -95,7 +134,7 @@ dli
 	rti
 
 gfx_plot
-	lda	color
+;	lda	color
 	cmp	#FIRST_SHADE+49
 	bcc	gfx_plot_normal
 	mva	#71	ptr
