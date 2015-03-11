@@ -52,6 +52,19 @@ play_ch1
 	sty	$d201
 
 	lda	song_line
+	cmp	#4
+	bcc	skip_ch2
+	ldx	pattern_line
+	lda	pattern3,x
+	ldx	#$10
+	jsr	do_ch2
+	ldx	pattern_line
+	lda	pattern12,x
+	ldx	#0
+	jsr	do_ch2
+skip_ch2
+	
+	lda	song_line
 	lsr	@
 	beq	play_ch3
 	lda	pattern_line
@@ -84,6 +97,29 @@ play_ch3
 msx_done
 	rts
 
+do_ch2
+	bit	constv1
+	php
+	and	#$1f
+	beq	keep_ch2
+	cmp	#G_3
+	bne	play_ch2
+	ldy	song_line
+	cpy	#$d
+	bne	play_ch2
+	lda	#Gh3
+play_ch2
+	tay
+	mva	pure_audf-1,y	$d202,x
+	lda	#$ab
+	plp
+	seq:lda	#$a1
+	sta	$d203,x
+	rts
+keep_ch2
+	plp
+	rts
+
 C_2	equ	1
 Ch2	equ	2
 D_2	equ	3
@@ -110,6 +146,13 @@ V1	equ	$20
 DRUM	equ	$40
 BASS	equ	$80
 
+constv1	dta	V1
+
+pattern3
+	dta	0
+	dta	0
+	dta	0
+	dta	0
 pattern12
 	dta	BASS|G_3
 	dta	0
@@ -162,5 +205,5 @@ bass_audf
 	dta	$bf,$bf,$bf,$bf,$bf,$bf,$7a,$bf,$bf,$bf,$7a,$bf,$da,$f2,$bf,$bf
 pure_audf
 	dta $78,$72,$6b,$65,$5f,$5a,$55,$50,$4b,$47,$43,$3f
-	dta	$3c,$38,$35,$32,$2f,$2c	;,$2a,$27,$25,$23,$21,$1f
+	dta	$3c,$38,$35,$32,$2f,$2c,$2a,$27,$25	;,$23,$21,$1f
 ;	dta	$1d,$1c,$1a,$18,$17,$16,$14,$13,$12,$11,$10
