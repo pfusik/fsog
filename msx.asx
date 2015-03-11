@@ -11,12 +11,19 @@ song_line	equ	$92
 	dta	c'STEREO',13,10
 	dta	c'TYPE B',13,10
 	dta	c'INIT 3000',13,10
-	dta	c'PLAYER 3001',13,10
+	dta	c'PLAYER 3007',13,10
 	dta	c'TIME 1:22.148 LOOP',13,10
 	opt	h+
 	org	f:$3000
+	mva	#0	frame
+	sta	song_line
 	rts
 	eif
+
+	mva	#3	$d21f
+	sta	$d20f
+	mva	#0	$d218
+	sta	$d208
 
 	lda	frame
 	lsr:lsr	@
