@@ -1,3 +1,6 @@
+Fifty_Shades_of_Grey.sap: msx.asx
+	xasm -q -o $@ -d SAP=1 $<
+
 run: fsog.xex
 	cygstart $<
 

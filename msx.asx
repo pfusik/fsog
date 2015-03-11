@@ -1,0 +1,129 @@
+frame	equ	$90
+pattern_line	equ	$91
+song_line	equ	$92
+
+	ift	SAP
+	opt	h-
+	dta	c'SAP',13,10
+	dta	c'AUTHOR "Lukasz Sychowicz (X-Ray)"',13,10
+	dta	c'NAME "Fifty Shades of Grey"',13,10
+	dta	c'DATE "10/03/2015"',13,10
+	dta	c'STEREO',13,10
+	dta	c'TYPE B',13,10
+	dta	c'INIT 3000',13,10
+	dta	c'PLAYER 3001',13,10
+	dta	c'TIME 1:22.148 LOOP',13,10
+	opt	h+
+	org	f:$3000
+	rts
+	eif
+
+	lda	frame
+	lsr:lsr	@
+	and	#$1f
+	sta	pattern_line
+	tax
+
+	lda	pattern12,x
+	bmi	play_bass
+	asl	@
+	bpl	silence_ch1
+; drum
+	lda	frame
+	and	#3
+	tax
+	lda	drum_audf,x
+	ldy	drum_audc,x
+	jmp	play_ch1
+play_bass
+	lda	frame
+	and	#7
+	cmp	#6
+	ldx	song_line
+	lda	bass_audf,x
+	ldy	#$cf
+	bcc	play_ch1
+silence_ch1
+	ldy	#0
+play_ch1
+	sta	$d210
+	sta	$d200
+	sty	$d211
+	sty	$d201
+
+	inc	frame
+	bne	msx_done
+	ldx	song_line
+	inx
+	cpx	#$10
+	scc:ldx	#4
+	stx	song_line
+msx_done
+	rts
+
+C_2	equ	1
+Ch2	equ	2
+D_2	equ	3
+Dh2	equ	4
+E_2	equ	5
+F_2	equ	6
+Fh2	equ	7
+G_2	equ	8
+Gh2	equ	9
+A_2	equ	10
+Ah2	equ	11
+H_2	equ	12
+C_3	equ	13
+Ch3	equ	14
+D_3	equ	15
+Dh3	equ	16
+E_3	equ	17
+F_3	equ	18
+Fh3	equ	19
+G_3	equ	20
+Gh3	equ	21
+
+V1	equ	$20
+DRUM	equ	$40
+BASS	equ	$80
+
+pattern12
+	dta	BASS|G_3
+	dta	0
+	dta	G_3|V1
+	dta	0
+	dta	DRUM|G_3
+	dta	0
+	dta	BASS|G_3|V1
+	dta	0
+	dta	D_3
+	dta	0
+	dta	BASS|G_3|V1
+	dta	0
+	dta	DRUM|D_3
+	dta	D_3|V1
+	dta	Dh3
+	dta	0
+	dta	D_3|V1
+	dta	0
+	dta	BASS|C_3
+	dta	0
+	dta	DRUM|C_3|V1
+	dta	0
+	dta	BASS
+	dta	0
+	dta	BASS
+	dta	0
+	dta	0
+	dta	0
+	dta	DRUM
+	dta	0
+	dta	0
+	dta	0
+
+drum_audf
+	dta	0,$00,$f0,0
+drum_audc
+	dta	0,$8f,$af,0
+bass_audf
+	dta	$bf,$bf,$bf,$bf,$bf,$bf,$7a,$bf,$bf,$bf,$7a,$bf,$da,$f2,$bf,$bf
