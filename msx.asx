@@ -51,6 +51,29 @@ play_ch1
 	sty	$d211
 	sty	$d201
 
+	lda	song_line
+	lsr	@
+	beq	play_ch3
+	lda	pattern_line
+	lsr	@
+	and	#7
+	tax
+	ldy	pattern4,x
+	beq	silence_ch3
+	lda	frame
+	and	#7
+	cmp	#1
+	bne	silence_ch3
+	mva	pure_audf+12-1,y	$d214
+	mva	pure_audf-1,y	$d204
+	lda	#$a8
+	dta	{bit a:}
+silence_ch3
+	lda	#0
+play_ch3
+	sta	$d215
+	sta	$d205
+
 	inc	frame
 	bne	msx_done
 	ldx	song_line
@@ -121,9 +144,23 @@ pattern12
 	dta	0
 	dta	0
 
+pattern4
+	dta	0
+	dta	C_2
+	dta	D_2
+	dta	Dh2
+	dta	F_2
+	dta	Dh2
+	dta	D_2
+	dta	C_2
+
 drum_audf
 	dta	0,$00,$f0,0
 drum_audc
 	dta	0,$8f,$af,0
 bass_audf
 	dta	$bf,$bf,$bf,$bf,$bf,$bf,$7a,$bf,$bf,$bf,$7a,$bf,$da,$f2,$bf,$bf
+pure_audf
+	dta $78,$72,$6b,$65,$5f,$5a,$55,$50,$4b,$47,$43,$3f
+	dta	$3c,$38,$35,$32,$2f,$2c	;,$2a,$27,$25,$23,$21,$1f
+;	dta	$1d,$1c,$1a,$18,$17,$16,$14,$13,$12,$11,$10
