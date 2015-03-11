@@ -1,0 +1,43 @@
+Taquart presents
+"Fifty Shades of Grey"
+
+One kilobyte intro for Atari 8-bit
+400/800/XL/XE PAL/NTSC compatible
+
+First presented in March 2015
+at the Forever Party
+
+Programmed by
+Piotr '0xF' Fusik
+<fox@scene.pl>
+
+Music composed by
+Lukasz 'X-Ray' Sychowicz
+<xray@scene.pl>
+
+Dedicated to Grey / Mystic Bytes.
+We want Silly Venture!
+
+Use PAL Atari with stereo POKEY
+and a CRT for best experience.
+
+If on Altirra please enable:
+System / Video / PAL
+System / Video / Frame blending
+System / Audio / Stereo
+
+Greetings:
+Lamers, Agenda, LaResistance, MEC,
+Mad Team, Tristesse, Blowjobb, Samar,
+Zelax, Slight, DLT, Satantronic,
+Mystic Bytes, Bit Busters, SSG,
+Sword Soft, Our 5oft, New Generation,
+JAC!, XXL, Rumun, Zenon, Marok, BeWu,
+Kaz, PG, MaPa, Candle, Sikor, TDC,
+Grzybson, Jell, Henryk, Yerzmyey,
+Bob!k, Cosi
+
+Coming soon to pouet.net.
+Video coming soon to YouTube.
+Soundtrack coming soon to ASMA.
+Source code coming soon to GitHub.
