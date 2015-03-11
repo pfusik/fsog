@@ -66,7 +66,7 @@ skip_ch2
 	
 	lda	song_line
 	lsr	@
-	beq	play_ch3
+	beq	skip_ch34
 	lda	pattern_line
 	lsr	@
 	and	#7
@@ -83,9 +83,36 @@ skip_ch2
 	dta	{bit a:}
 silence_ch3
 	lda	#0
-play_ch3
 	sta	$d215
 	sta	$d205
+
+	lda	song_line
+	cmp	#$c
+	bcs	final_ch4
+	ldx	frame
+	cpx	#$80
+	rol	@
+	tax
+	ldy	right4_audf-4,x
+	and	#7
+	tax
+	sty	$d216
+	mvy	left4_audf,x	$d206
+	lda	#$a5
+	bne	play_ch4	; jmp
+final_ch4
+	lda	pattern_line
+	and	#7
+	tax
+	lsr	@
+	mva	pattern8_audf,x	$d216
+	mva	pattern5_audf,x	$d206
+	lda	#$ab
+	scc:lda	#$a1
+play_ch4
+	sta	$d217
+	sta	$d207
+skip_ch34
 
 	inc	frame
 	bne	msx_done
@@ -197,6 +224,11 @@ pattern4
 	dta	D_2
 	dta	C_2
 
+pattern8_audf
+	dta	$32,$3c,$35,$32
+pattern5_audf
+	dta	$43,$43,$3c,$43,$32,$3c,$35,$32
+
 drum_audf
 	dta	0,$00,$f0,0
 drum_audc
@@ -207,3 +239,21 @@ pure_audf
 	dta $78,$72,$6b,$65,$5f,$5a,$55,$50,$4b,$47,$43,$3f
 	dta	$3c,$38,$35,$32,$2f,$2c,$2a,$27,$25	;,$23,$21,$1f
 ;	dta	$1d,$1c,$1a,$18,$17,$16,$14,$13,$12,$11,$10
+
+left4_audf
+	dta	$78,$6b	; pattern 7
+	dta	$65,$5a	; pattern 7 transposed by 3
+	dta	$78,$78	; pattern 6
+	dta	$78,$78
+
+right4_audf
+	dta	$a1,$a1	; pattern 6 transposed by -5
+	dta	$a1,$a1
+	dta	$65,$5a	; pattern 7 transposed by 3
+	dta	$50,$4b	; pattern 9
+	dta	$65,$65	; pattern 6 transposed by 3
+	dta	$65,$65
+	dta	$65,$5a	; pattern 7 transposed by 3
+	dta	$50,$4b	; pattern 9
+	dta	$65,$65	; pattern 6 transposed by 3
+	dta	$65,$65
