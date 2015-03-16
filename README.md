@@ -18,6 +18,8 @@ If you use the Altirra emulator, please enable:
 * System / Video / Frame blending
 * System / Audio / Stereo
 
+"Fifty Shades of Grey" took fourth place in the Atari 8-bit 1 kilobyte intro
+competition at [Forever 16 Party](http://www.forever-party.net/).
 
 Credits
 -------
@@ -31,3 +33,9 @@ Used Tools
 [xasm](http://xasm.atari.org), [SciTE](http://scintilla.org/SciTE.html),
 [Atari800Win PLus](http://www.atari.org.pl/PLus/index_us.htm), GNU Make,
 Theta Music Composer.
+
+Links
+-----
+
+* [Download](ftp://ftp.untergrund.net/users/ltk_tscc/fujiology/!PARTIES/2015/FOREVR16/A8IN1K/FOX/FSOG.ZIP)
+* [Comment and vote](http://pouet.net/prod.php?which=65241)
