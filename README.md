@@ -34,8 +34,7 @@ Used Tools
 [Atari800Win PLus](http://www.atari.org.pl/PLus/index_us.htm), GNU Make,
 Theta Music Composer.
 
-Links
------
+Link
+----
 
-* [Download](ftp://ftp.untergrund.net/users/ltk_tscc/fujiology/!PARTIES/2015/FOREVR16/A8IN1K/FOX/FSOG.ZIP)
-* [Comment and vote](http://pouet.net/prod.php?which=65241)
+Download, watch on YouTube, comment and vote at [pouet.net](http://pouet.net/prod.php?which=65241).
